@@ -10,9 +10,11 @@
         beforeEach(module('tofuForumApp'));
         
         // instantiate service
-        var Authentication;
-        beforeEach(inject(['Authentication',function (_Authentication_) {
+        var Authentication,loginUrl,logoutUrl;
+        beforeEach(inject(['Authentication','loginUrl','logoutUrl',function (_Authentication_,_loginUrl_,_logoutUrl_) {
             Authentication = _Authentication_;
+            loginUrl = _loginUrl_;
+            logoutUrl = _logoutUrl_;
         }]));
      
         // set up httpbackend
@@ -39,7 +41,7 @@
         // test authenticated value after login success
 
         it('Authenticated value after login success', function() {
-            $httpBackend.when('POST','/login').respond(200,'Ok');
+            $httpBackend.when('POST',loginUrl).respond(200,'Ok');
             Authentication.login(userCredentials,function(){},function(){});
             $httpBackend.flush();
             expect(Authentication.authenticated).toBe(true);
@@ -48,7 +50,7 @@
         // test authenticated value after login failure
         
         it('Authenticated value after login failure', function() {
-            $httpBackend.when('POST','/login').respond(500,'Failure');
+            $httpBackend.when('POST',loginUrl).respond(500,'Failure');
             Authentication.login(userCredentials,function(){},function(){});
             $httpBackend.flush();
             expect(Authentication.authenticated).toBe(false);
@@ -59,7 +61,7 @@
         it('Success function is called after login success', function() {
             var success = false;
             var failure = false;
-            $httpBackend.when('POST','/login').respond(200,'Ok');
+            $httpBackend.when('POST',loginUrl).respond(200,'Ok');
             Authentication.login(userCredentials,function(){
                 success = true;
             },function(){});
@@ -74,7 +76,7 @@
         it('Failure function is called after login failure', function() {
             var success = false;
             var failure = false;
-            $httpBackend.when('POST','/login').respond(500,'Failed');
+            $httpBackend.when('POST',loginUrl).respond(500,'Failed');
             Authentication.login(userCredentials,function(){
                 success = false;
             },function(){
@@ -91,7 +93,7 @@
         it('Success function is called after logout success', function() {
             var success = false;
             var failure = false;
-            $httpBackend.when('POST','/logout').respond(200,'Ok');
+            $httpBackend.when('POST',logoutUrl).respond(200,'Ok');
             Authentication.logout(function(){
                 success = true;
             },function() {
@@ -108,7 +110,7 @@
         it('Failure function is called after logout failure', function() {
             var success = false;
             var failure = false;
-            $httpBackend.when('POST','/logout').respond(500,'Failed');
+            $httpBackend.when('POST',logoutUrl).respond(500,'Failed');
             Authentication.logout(function(){
                 success = true;
             },function() {
