@@ -5,8 +5,8 @@
     'use strict';
 
     var module = angular.module('tofuForumApp');
-    module.value('loginUrl','/login');
-    module.value('logoutUrl','/logout');
+    module.value('loginUrl','/php/login.php');
+    module.value('logoutUrl','/php/logout.php');
     module.factory('Authentication',['$http','loginUrl','logoutUrl',function($http,loginUrl,logoutUrl){
         var service = {};
         service.authenticated = false;
