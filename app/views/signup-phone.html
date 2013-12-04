@@ -3,22 +3,17 @@
     <form>
       <fieldset>
         <legend>Sign up</legend>
-
-            <label>Name</label>
-            <input type="text" name="name">
-
-            <label>Email</label>
-            <input type="text" name="email">
-
-            <label>Password</label>
-            <input type="password" name="password">
-
-            <label>Confirm</label>
-            <input type="password" name="confirmPassword">
-            </div>
-
-            <button class="btn">Sign up</button>
-
+        <label>Name</label>
+        <input class="input-block-level" type="text" ng-model="user.name">
+        <label>Email</label>
+        <input class="input-block-level" type="email" ng-model="user.email">
+        <label>Confirm Email</label>
+        <input class="input-block-level" type="email" ng-model="user.confirmEmail">
+        <label>Password</label>
+        <input class="input-block-level" type="password" ng-model="user.password">
+        <label>Confirm Password</label>
+        <input class="input-block-level" type="password" ng-model="user.confirmPassword">
+        <button class="btn" ng-click="signup()">Sign up</button>
       </fieldset>
     </form>
   </div>

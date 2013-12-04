@@ -1,35 +1,41 @@
 <div class="row-fluid visible-desktop">
-  <div class="offset4 span4">
-    <form class="form-horizontal">
+  <div class="offset3 span6">
+    <form class="form-horizontal" name="SignupForm" ng-controller="SignupformCtrl">
       <fieldset>
         <legend>Sign up</legend>
         <div class="control-group">
           <label class="control-label">Name</label>
           <div class="controls">
-            <input class="input-block-level" type="text" name="name">
+            <input class="input-block-level" type="text" ng-model="SignupForm.userName" required>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label">Email</label>
           <div class="controls">
-            <input class="input-block-level" type="text" name="email">
+            <input class="input-block-level" type="email" ng-model="SignupForm.userEmail" required>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Confirm Email</label>
+          <div class="controls">
+            <input class="input-block-level" type="email" ng-model="SignupForm.userEmailConfirm" required>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label">Password</label>
           <div class="controls">
-            <input class="input-block-level" type="password" name="password">
+            <input class="input-block-level" type="password" ng-model="SignupForm.userPassword" required ng-minlength=8>
           </div>
         </div>
         <div class="control-group">
-          <label class="control-label">Confirm</label>
+          <label class="control-label">Confirm Password</label>
           <div class="controls">
-            <input class="input-block-level" type="password" name="confirmPassword">
+            <input class="input-block-level" type="password" ng-model="SignupForm.userPasswordConfirm" required ng-minlength=8>
           </div>
         </div>
         <div class="control-group">
           <div class="controls">
-            <button class="btn">Sign up</button>
+            <button class="btn" ng-click="signup(SignupForm)">Sign up</button>
           </div>
         </div>
       </fieldset>
