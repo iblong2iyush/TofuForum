@@ -5,6 +5,7 @@
     'use strict';
     
     angular.module('tofuForumApp', [
+        'ui.bootstrap',
         'ngCookies',
         'ngResource',
         'ngSanitize',
