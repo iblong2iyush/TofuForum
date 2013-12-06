@@ -13,7 +13,6 @@
         $scope.messages = [];
 
         var receiveMessage = function(event,data) {
-            console.log('We got a message');
             addMessage(data.type,data.message);
         };
 
