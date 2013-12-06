@@ -1,0 +1,5 @@
+<div ng-controller="MessageboxCtrl">
+  <alert ng-repeat="alert in messages" type="alert.type" close="close($index)">
+  {{alert.message}}
+  </alert>
+</div>
