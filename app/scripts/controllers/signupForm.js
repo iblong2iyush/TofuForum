@@ -32,7 +32,7 @@
                 }
                 return (user.userEmail !== user.userEmailConfirm);
             };
-            $scope.isNotMatchingPasswords = function(fieldName) {
+            $scope.isNotMatchingPasswords = function() {
                 var user = $scope.user;
                 if (!('userPassword' in user)) {
                     return true;
