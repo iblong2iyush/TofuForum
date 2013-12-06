@@ -5,14 +5,13 @@
     'use strict';
     
     var module = angular.module('tofuForumApp');
-    module.controller('SignupformCtrl',function($scope,Util,Message,MessageboxEvent,MessageboxAlertType) {
+    module.controller('SignupformCtrl',function($scope,Util,Userbackend,Msgbox) {
             $scope.hasSubmitted = false;
             $scope.user = {};
             $scope.signup = function(form) {
                 $scope.hasSubmitted = true;
                 if (!form.$valid) {
-                    console.log(form);
-                    Message.send(MessageboxEvent,{type:MessageboxAlertType,message:'Please fill out all fields.'});
+                    Msgbox.alert('Please fill out all fields.');
                     return;
                 }
                 // check to see if passwords and emails match
