@@ -1,5 +1,5 @@
 <div class="row-fluid visible-desktop">
-  <div class="offset3 span6">
+  <div class="offset2 span8">
     <div ng-include="'views/messagebox.html'"></div>
     <form novalidate class="form-horizontal" name="SignupForm" ng-controller="SignupformCtrl">
       <fieldset>
@@ -7,7 +7,7 @@
         <div class="control-group">
           <label class="control-label">Name</label>
           <div class="controls">
-            <input name="userName" class="input-large" type="text" ng-model="user.userName" required ng-minlength=6>
+            <input name="userName" class="input-xlarge" type="text" ng-model="user.userName" required ng-minlength=6>
             <span class="error" ng-show="SignupForm.userName.$error.required">This name is required.</span>
             <span class="error" ng-show="SignupForm.userName.$error.minlength">This name is too short.</span>
           </div>
@@ -15,16 +15,16 @@
         <div class="control-group">
           <label class="control-label">Email</label>
           <div class="controls">
-            <input name="userEmail" class="input-large" type="email" ng-model="user.userEmail" required>
+            <input name="userEmail" class="input-xlarge" type="email" ng-model="user.userEmail" required>
             <span class="error" ng-show="SignupForm.userEmail.$error.required">This email is required.</span>
             <span class="error" ng-show="!SignupForm.userEmail.$valid && SignupForm.userEmail.$dirty">This email format is not valid.</span>
-            <span class="error" ng-show="isNotMatchingEmails()">Both emails must match.</span>
+            <span class="error" ng-show="isNotMatchingEmails()">Emails must match.</span>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label">Confirm Email</label>
           <div class="controls">
-            <input name="userEmailConfirm" class="input-large" type="email" ng-model="user.userEmailConfirm" required>
+            <input name="userEmailConfirm" class="input-xlarge" type="email" ng-model="user.userEmailConfirm" required>
             <span class="error" ng-show="SignupForm.userEmailConfirm.$error.required">This email is required.</span>
 
             <span class="error" ng-show="!SignupForm.userEmailConfirm.$valid && SignupForm.userEmailConfirm.$dirty">This email format is not valid.</span>
@@ -33,16 +33,16 @@
         <div class="control-group">
           <label class="control-label">Password</label>
           <div class="controls">
-            <input name="userPassword" class="input-large" type="password" ng-model="user.userPassword" required ng-minlength=8>
+            <input name="userPassword" class="input-xlarge" type="password" ng-model="user.userPassword" required ng-minlength=8>
             <span class="error" ng-show="SignupForm.userPassword.$error.required">This password is required.</span>
             <span class="error" ng-show="SignupForm.userPassword.$error.minlength">This password is too short.</span>
-            <span class="error" ng-show="isNotMatchingPasswords()">Both passwords must match.</span>
+            <span class="error" ng-show="isNotMatchingPasswords()">Passwords must match.</span>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label">Confirm Password</label>
           <div class="controls">
-            <input name="userPasswordConfirm" class="input-large" type="password" ng-model="user.userPasswordConfirm" required ng-minlength=8>
+            <input name="userPasswordConfirm" class="input-xlarge" type="password" ng-model="user.userPasswordConfirm" required ng-minlength=8>
             <span class="error" ng-show="SignupForm.userPasswordConfirm.$error.required">This password is required.</span>
             <span class="error" ng-show="SignupForm.userPasswordConfirm.$error.minlength">This password is too short.</span>
           </div>
