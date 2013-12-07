@@ -5,6 +5,7 @@
     'use strict';
     
     angular.module('tofuForumApp', [
+        'ngAnimate-animate.css',
         'ui.bootstrap',
         'ngCookies',
         'ngResource',
