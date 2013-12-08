@@ -136,9 +136,16 @@ module.exports = function (grunt) {
       }
     },
 
-    
-
-    
+    phpunit: {
+      classes: {
+        dir: 'test/php/'
+      },
+      options: {
+        bin: 'vendor/bin/phpunit',
+        bootstrap: 'test/php/phpunit.php',
+        colors: true
+      }
+    },
 
     // Renames files for browser caching purposes
     rev: {
@@ -344,7 +351,8 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    'karma',
+    'phpunit'
   ]);
 
   grunt.registerTask('build', [
