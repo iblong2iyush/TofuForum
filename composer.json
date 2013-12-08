@@ -1,0 +1,16 @@
+{
+    "name": "jeromechan/tofu-forum",
+    "authors": [
+        {
+            "name": "eviltofu",
+            "email": "eviltofu@mac.com"
+        }
+    ],
+    "require": {
+        "gabordemooij/redbean": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "phpunit/dbunit": "*"
+    }
+}
