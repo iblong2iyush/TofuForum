@@ -1,6 +1,6 @@
 <phpunit>
   <php>
-    <includePath>app/php/</includePath>  
+    <includePath>app/php/classes</includePath>  
     <includePath>app/php/services</includePath>
   </php>
 </phpunit>

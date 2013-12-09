@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<dataset>
+  <table name="users">
+    <column>id</column>
+    <column>name</column>
+    <column>password</column>
+    <column>email</column>
+    <column>created</column>
+    <column>updated</column>
+    <column>lastLogin</column>
+    <column>permission</column>
+    <column>enabled</column>
+    <row>
+      <value>1</value>
+      <value>Jerome Chan</value>
+      <value>nosuchpassword</value>
+      <value>horse@chan.com</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>1</value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>Derek Chan</value>
+      <value>nosuchpassword</value>
+      <value>dog@mac.com</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>1</value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>3</value>
+      <value>Robin Chan</value>
+      <value>nosuchpassword</value>
+      <value>bull@ibm.com</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>1</value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>4</value>
+      <value>Jenny Chan</value>
+      <value>nosuchpassword</value>
+      <value>dragon@hdb.gov</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>1</value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>5</value>
+      <value>Johnson Tan</value>
+      <value>nosuchpassword</value>
+      <value>snake@printers.com</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>1</value>
+      <value>1</value>
+    </row>
+  </table>
+</dataset>
