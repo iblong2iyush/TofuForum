@@ -19,6 +19,7 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
     }
 
     protected function setUp() {
+        parent::setUp();
         $this->goodDataArray = array(
             'userName' => 'Jerome Chan Yeow Heong',
             'userEmail' => 'evil@evil.com',
@@ -26,28 +27,40 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
             'userPassword' => 'nosuchpassword@nosuchrobot',
             'userPasswordConfirm' => 'nosuchpassword@nosuchrobot'
         );
-        parent::setUp();
     }
 
     public function testArrayHasMissingSignUpProperty() {
         $data = $this->goodDataArray;
         unset($data['userName']);
         $result = UserService::signup($data);
-        $this->assertEquals($result->code(),6);
+        $this->assertEquals(UserService::missingFieldError,$result->code());
     }
 
     public function testArrayHasNonMatchingPasswords() {
         $data = $this->goodDataArray;
         $data['userPasswordConfirm'] = '44';
         $result = UserService::signup($data);
-        $this->assertEquals($result->code(),5);
+        $this->assertEquals(UserService::nonMatchingPasswordError,$result->code());
     }
 
     public function testArrayHasNonMatchingEmails() {
         $data = $this->goodDataArray;
         $data['userEmail'] = 'good@good.com';
         $result = UserService::signup($data);
-        $this->assertEquals($result->code(),4);
+        $this->assertEquals(UserService::nonMatchingEmailError,$result->code());
+    }
+
+    public function testDuplicateName() {
+        $data = $this->goodDataArray;
+        $data['userName'] = 'Jerome Chan';
+        $result = UserService::signup($data);
+        $this->assertEquals(UserService::duplicateNameError,$result->code());
+    }
+
+    public function testOk() {
+        $data = $this->goodDataArray;
+        $result = UserService::signup($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
     }
 
 }
