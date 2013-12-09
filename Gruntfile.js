@@ -143,7 +143,8 @@ module.exports = function (grunt) {
       options: {
         bin: 'vendor/bin/phpunit',
         bootstrap: 'test/php/phpunit.php',
-        colors: true
+        colors: true,
+        configuration: 'phpunit.xml'
       }
     },
 
