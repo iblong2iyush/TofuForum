@@ -18,8 +18,18 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
         return $result;
     }
 
+    public function getDB() {
+        $database = 'tofuforumtest';
+        $user = 'root';
+        $password = 'root';
+        $pdo = new PDO('mysql:unix_socket=/Applications/MAMP/tmp/mysql/mysql.sock;dbname=tofuforumtest',$user,$password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    }
+
     protected function setUp() {
         parent::setUp();
+        UserService::setDB($this->getDb());
         $this->goodDataArray = array(
             'userName' => 'Jerome Chan Yeow Heong',
             'userEmail' => 'evil@evil.com',
@@ -27,6 +37,11 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
             'userPassword' => 'nosuchpassword@nosuchrobot',
             'userPasswordConfirm' => 'nosuchpassword@nosuchrobot'
         );
+    }
+
+    public function tearDown() {
+        parent::tearDown();
+        UserService::setDB(null);
     }
 
     public function testArrayHasMissingSignUpProperty() {
