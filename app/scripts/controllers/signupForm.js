@@ -8,11 +8,16 @@
     module.controller('SignupformCtrl',function($scope,Util,Userbackend,Msgbox) {
         $scope.hasSubmitted = false;
         $scope.user = {};
-        var successCallback = function(){
-            // have to figure out what this is
+        $scope.gotoUrl = Util.gotoUrl;
+        var successCallback = function(data,status){
+            if (status!==200) {
+                Msgbox.alert(data.message);
+                return;
+            }
+            Util.gotoUrl('/login');
         };
-        var failureCallback = function(){
-            // yes this too
+        var failureCallback = function(data){
+            Msgbox.alert('An unexpected network error has occurred: '+data);
         };
         $scope.signup = function(form) {
             $scope.hasSubmitted = true;
