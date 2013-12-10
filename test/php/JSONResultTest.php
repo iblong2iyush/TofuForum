@@ -1,5 +1,6 @@
 <?php
 
+require_once('PHPUnit/Autoload.php');
 require_once('json_results.php');
 
 class JSONResultTest extends PHPUnit_Framework_TestCase {

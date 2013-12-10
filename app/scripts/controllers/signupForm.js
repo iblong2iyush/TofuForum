@@ -14,6 +14,10 @@
                 Msgbox.alert(data.message);
                 return;
             }
+            if (data.code!==0) {
+                Msgbox.alert(data.message);
+                return;
+            }
             Util.gotoUrl('/login');
         };
         var failureCallback = function(data){

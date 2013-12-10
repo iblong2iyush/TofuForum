@@ -55,13 +55,18 @@ class UserService {
                 return new JSONResult(self::nonMatchingEmailError,'Emails did not match.');
             }
             
+
+            /* check for duplicate email */
+            
+            /* check for duplicate name */
+
             /* Add user to database and handle error if any */
             try {
                 self::addUserToDatabase($data);
             } catch (PDOException $e) {
                 $err = $e->errorInfo[1];
                 if ($err==1062) {
-                    return new JSONResult(self::duplicateNameError,'Duplicate user name.');
+                    return new JSONResult(self::duplicateNameError,'Duplicate field ['.$e->errorInfo[2].'].');
                 } 
                 return new JSONResult(self::unknownError,$e->errorInfo[2]);
             }
@@ -101,12 +106,14 @@ class UserService {
     }
 
     protected static function addUserToDatabase($data) {
+        $securePasswordHash = Authentication::hash($data['userPassword']);
         $db = self::DB();
-        $sql = "insert into users (name, email, password) values (:name, :email, :password)";
+        $sql = "insert into users (name, email, password, salt) values (:name, :email, :password, :salt)";
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$data['userName'],PDO::PARAM_STR, 40);        
         $stmt->bindParam(':email',$data['userEmail'],PDO::PARAM_STR, 40);        
-        $stmt->bindParam(':password',$data['userPassword'],PDO::PARAM_STR, 32);
+        $stmt->bindParam(':password',$securePasswordHash['hash'],PDO::PARAM_STR, 128);
+        $stmt->bindParam(':salt',$securePasswordHash['salt'],PDO::PARAM_STR, 32);
         $stmt->execute();
     }
     

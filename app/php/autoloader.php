@@ -6,7 +6,8 @@ class Autoloader {
         'Database' => 'classes/database.php',
         'UserService' => 'services/user.php',
         'JSONResult' => 'classes/json_results.php',
-        'Http' => 'services/http.php'
+        'Http' => 'services/http.php',
+        'Authentication' => 'services/authentication.php'
     );
 
     public static function loadClass($name) {

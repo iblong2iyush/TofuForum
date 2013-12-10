@@ -1,7 +1,7 @@
 <?php
 
-require('PHPUnit/Autoload.php');
-require('user.php');
+require_once('PHPUnit/Autoload.php');
+require_once('user.php');
 
 class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
 
