@@ -23,9 +23,14 @@
             $httpBackend = backend;
         }]));
 
+        var jsonResponse;
         afterEach(function() {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
+            jsonResponse = {
+                code: 0,
+                message: 'ok'
+            };
         });
 
         // test default authenticated value
@@ -38,10 +43,11 @@
             password: 'moomoomoo'
         };
 
+
         // test authenticated value after login success
 
         it('Authenticated value after login success', function() {
-            $httpBackend.when('POST',loginUrl).respond(200,'Ok');
+            $httpBackend.when('POST',loginUrl).respond(200,jsonResponse);
             Authentication.login(userCredentials,function(){},function(){});
             $httpBackend.flush();
             expect(Authentication.authenticated).toBe(true);
@@ -61,7 +67,7 @@
         it('Success function is called after login success', function() {
             var success = false;
             var failure = false;
-            $httpBackend.when('POST',loginUrl).respond(200,'Ok');
+            $httpBackend.when('POST',loginUrl).respond(200,jsonResponse);
             Authentication.login(userCredentials,function(){
                 success = true;
             },function(){});

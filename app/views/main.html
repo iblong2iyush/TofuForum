@@ -1,16 +1,1 @@
-<div>The user is {{ authentication.authenticated }}. </div>
-<div>If the user is not authenticated, show the signup page.</div>
-<div>Else show the following:</div>
-<div>This needs to show the main menubar with the Stream, Messages, Forums, Users options on the left and Options, and Logout on the right.</div>
 <div>This is the main page</div>
-<div ng-if="authentication.authenticated">
-  This is when the user is authenticated.
-  <div ng-include="'views/message.html'"></div>
-</div>
-<div ng-if="!authentication.authenticated">
-  <div>This is when the user is not authenticated.</div>
-  <div ng-include="'views/signup.html'">X</div>
-  <div>This is hot.</div>
-</div>
-<div ng-include="'views/signup.html'">This is where the signup form should be.</div>
-<div>Hello Nurse!</div>

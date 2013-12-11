@@ -21,19 +21,20 @@
         <div class="control-group">
           <label class="control-label">Name</label>
           <div class="controls">
-            <input name="userName" class="input-xlarge" type="text" ng-model="user.userName" required ng-minlength=6>
+            <input name="userName" class="input-xlarge" type="text" ng-model="user.userName" required>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label">Password</label>
           <div class="controls">
-            <input name="userPassword" class="input-xlarge" type="password" ng-model="user.userPassword" required ng-minlength=8>
+            <input name="userPassword" class="input-xlarge" type="password" ng-model="user.userPassword" required>
           </div>
         </div>
         <div class="controls">
-          <button class="btn btn-primary" ng-click="login(SignupForm)">Login</button> <button class="btn" ng-click="gotoUrl('/signup')">Sign Up</button>
+          <button class="btn btn-primary" ng-click="login(LoginForm)">Login</button> <button class="btn" ng-click="gotoUrl('/signup')">Sign Up</button>
         </div>
   </div>
   </fieldset>
   </form>
 </div>
+

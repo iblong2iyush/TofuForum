@@ -17,6 +17,7 @@ class UserService {
     const nonMatchingEmailError = 4;
     const nonMatchingPasswordError = 5;
     const missingFieldError = 6;
+    const namePasswordError = 7;
 
     protected static $db;
 
@@ -41,8 +42,8 @@ class UserService {
 
         try {
             /* confirm all fields are present */
-            if (!self::verifySignUpData($data)) {
-                return new JSONResult(self::missingFieldError,'Field is missing');
+            if (!self::verifyDataFields($data,self::signUpProperties())) {
+                return new JSONResult(self::missingFieldError,'Field is missing.');
             }
             
             /* confirm password */
@@ -56,9 +57,9 @@ class UserService {
             }
             
 
-            /* check for duplicate email */
+            /* TODO check for duplicate email */
             
-            /* check for duplicate name */
+            /* TODO check for duplicate name */
 
             /* Add user to database and handle error if any */
             try {
@@ -74,15 +75,35 @@ class UserService {
             return new JSONResult(self::unknownError,$e->errorInfo[1].' '.$e->errorInfo[2]);
         }
         /* Everything is ok */
-        return new JSONResult(self::resultOk,'User signed up');
+        return new JSONResult(self::resultOk,'User signed up.');
+    }
+
+    public static function login($data) {
+        /* error code: 0 message: 'user logged in' */
+        /* error code: 6 message: 'name or password is missing */
+        /* error code: 7 message: 'user not found or password mismatched */
+        if (!self::verifyDataFields($data,self::loginProperties())) {
+            return new JSONResult(self::missingFieldError,'Name or password is missing.');
+        }
+        try {
+            if (!self::authenticate($data['userName'],$data['userPassword'])) {
+                return new JSONResult(self::namePasswordError,'Name or password does not match records.');
+            }
+        } catch (Exception $e) {
+            return new JSONResult(self::unknownError,$e->getMessage());
+        }
+        return new JSONResult(self::resultOk,'Ok user logged in.');
     }
 
     protected static function signUpProperties() {
         return ['userName','userEmail','userEmailConfirm','userPassword','userPasswordConfirm'];
     }
 
-    protected static function verifySignUpData($data) {
-        $properties = self::signUpProperties();
+    protected static function loginProperties() {
+        return ['userName','userPassword'];
+    }
+
+    protected static function verifyDataFields($data,$properties) {
         foreach ($properties as $property) {
             if (!array_key_exists($property,$data)) {
                 return false;
@@ -108,7 +129,7 @@ class UserService {
     protected static function addUserToDatabase($data) {
         $securePasswordHash = Authentication::hash($data['userPassword']);
         $db = self::DB();
-        $sql = "insert into users (name, email, password, salt) values (:name, :email, :password, :salt)";
+        $sql = 'insert into users (name, email, password, salt) values (:name, :email, :password, :salt)';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$data['userName'],PDO::PARAM_STR, 40);        
         $stmt->bindParam(':email',$data['userEmail'],PDO::PARAM_STR, 40);        
@@ -117,6 +138,19 @@ class UserService {
         $stmt->execute();
     }
     
+    protected static function authenticate($name,$password) {
+        $db = self::DB();
+        $sql = 'select * from users where name = :name';
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':name',$name);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            // No matches for the name
+            return false;
+        }
+        return Authentication::authenticate($password,$row['password'],$row['salt']);
+    }
 }
 
 ?>

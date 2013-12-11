@@ -28,6 +28,10 @@
                     templateUrl: 'views/signup.html',
                     controller: 'SignupCtrl'
                 })
+                .when('/main', {
+                    templateUrl: 'views/main.html',
+                    controller: 'MessageCtrl'
+                })
                 .otherwise({
                     redirectTo: '/login'
                 });

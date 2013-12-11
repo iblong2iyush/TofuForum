@@ -10,6 +10,12 @@ class Authentication {
             'hash'=>$digest);
     }
     
+    public static function authenticate($password,$hash,$salt) {
+        $saltedPassword = $password . $salt;
+        $digest = openssl_digest($saltedPassword,'sha512');
+        return $hash === $digest;
+    }
+    
     protected static function randomSalt() {
         $cstrong = false;
         while (!$cstrong) {        
