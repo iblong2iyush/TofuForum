@@ -18,6 +18,7 @@
                 Msgbox.alert(data.message);
                 return;
             }
+            Msgbox.info(data.message);
             Util.gotoUrl('/login');
         };
         var failureCallback = function(data){
