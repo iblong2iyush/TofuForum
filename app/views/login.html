@@ -1,3 +1,39 @@
-<div>This is the login page</div>
-<a ng-click="gotoUrl('/signup')">Go to the signup page</a>
-<div>Reset your passwrord</div>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="navbar hidden-phone">
+      <div class="navbar-inner">
+        <a class="brand" href="">TofuForums</a>
+        <ul class="nav pull-right">
+          <li class="active divider-vertical"><a href="#/login">Login</a></li>
+          <li class="divider-vertical"><a href="#/resetPassword">Reset password</a></li>
+          <li class="divider-vertical"><a href="#/signup">Sign up</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="offset2 span8">
+    <div ng-include="'views/messagebox.html'"></div>
+    <form novalidate class="form-horizontal" name="LoginForm" ng-controller="LoginformCtrl">
+      <fieldset>
+        <legend>Login</legend>
+        <div class="control-group">
+          <label class="control-label">Name</label>
+          <div class="controls">
+            <input name="userName" class="input-xlarge" type="text" ng-model="user.userName" required ng-minlength=6>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Password</label>
+          <div class="controls">
+            <input name="userPassword" class="input-xlarge" type="password" ng-model="user.userPassword" required ng-minlength=8>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" ng-click="login(SignupForm)">Login</button> <button class="btn" ng-click="gotoUrl('/signup')">Sign Up</button>
+        </div>
+  </div>
+  </fieldset>
+  </form>
+</div>
