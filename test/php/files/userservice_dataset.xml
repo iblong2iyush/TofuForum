@@ -4,6 +4,7 @@
     <column>id</column>
     <column>name</column>
     <column>password</column>
+    <column>salt</column>
     <column>email</column>
     <column>created</column>
     <column>updated</column>
@@ -13,7 +14,8 @@
     <row>
       <value>1</value>
       <value>Jerome Chan</value>
-      <value>nosuchpassword</value>
+      <value>036c1db8a7d32207affc07699ebd74ea3d8ef7afc2a4bc6195bd63ced5d29d4bdfc8e0bb2b02ad5d05c6562f0d11ced2a016a18d3e900118c51192bafb7fdc14</value>
+      <value>596349196d95f09a0f89deacc5219a7a</value>
       <value>horse@chan.com</value>
       <value>2013-12-09 18:00:00</value>
       <value>2013-12-09 19:00:00</value>
@@ -24,7 +26,8 @@
     <row>
       <value>2</value>
       <value>Derek Chan</value>
-      <value>nosuchpassword</value>
+      <value>c2cbce250c8fdb342fa0beceb8a94925447455884b384b83e459a9e34f071434207894890ff1129ff984af7106aa27cf4ecb5bd419da6866c4684690b520eeb4</value>
+      <value>f9a66148f4d926b2679400f3b1e6321c</value>
       <value>dog@mac.com</value>
       <value>2013-12-09 18:00:00</value>
       <value>2013-12-09 19:00:00</value>
@@ -35,7 +38,8 @@
     <row>
       <value>3</value>
       <value>Robin Chan</value>
-      <value>nosuchpassword</value>
+      <value>8cce9f6f550203e4f1bfec68c3a290c93e4f8ead9363f0633cce89b27c4b4c86467100cbfdcc827a57ac402468c5232acc12fd91a830ea621ebd5b03509d228a</value>
+      <value>3cdcc0da08aa6da9134c52a6fa7e6d91</value>
       <value>bull@ibm.com</value>
       <value>2013-12-09 18:00:00</value>
       <value>2013-12-09 19:00:00</value>
@@ -46,7 +50,8 @@
     <row>
       <value>4</value>
       <value>Jenny Chan</value>
-      <value>nosuchpassword</value>
+      <value>23d976f9e59df1b4ce737358d368d04dbb91c5cb610e45c0da66bfa761a7b7fcc5a26b3a0a5bb9610b3df171299bf262e37b885f94648f7d0491bab5ca96f227</value>
+      <value>4312a4ced269928d8324e6019582249a</value>
       <value>dragon@hdb.gov</value>
       <value>2013-12-09 18:00:00</value>
       <value>2013-12-09 19:00:00</value>
@@ -57,13 +62,27 @@
     <row>
       <value>5</value>
       <value>Johnson Tan</value>
-      <value>nosuchpassword</value>
+      <value>81c1eaf73fb846c2d8383bfa21c87d9b5912cf3ad9581968e2e4007078b6f74290ad1d37d4d243f34dbe55131c31d3440f82a50ee2716440e7357f0e3ab7cdd9</value>
+      <value>ee8e78fcdea1b8e442281814fa01afce</value>
       <value>snake@printers.com</value>
       <value>2013-12-09 18:00:00</value>
       <value>2013-12-09 19:00:00</value>
       <value>2013-12-09 18:00:00</value>
       <value>1</value>
+      <value>0</value>
+    </row>
+    <row>
+      <value>6</value>
+      <value>Angel Tan</value>
+      <value>5c9bc39c70b3827f1dfb4d9bce617544db6a3b50ceb9f3554cf748e0570d5c5ce67a794728c4bc96d31a899e269e4616899f8048734f0e15c118810de93c7d33</value>
+      <value>1e0bc085ed993dff3b665aaef7c563d1</value>
+      <value>fish@sea.com</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>2013-12-09 19:00:00</value>
+      <value>2013-12-09 18:00:00</value>
+      <value>0</value>
       <value>1</value>
     </row>
+
   </table>
 </dataset>

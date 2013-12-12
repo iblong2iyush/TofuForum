@@ -78,5 +78,58 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
         $this->assertEquals(UserService::resultOk,$result->code());
     }
 
+    public function testLoginOk() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan';
+        $data['userPassword'] = 'horse';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+    }
+
+    public function testLoginNoSuchUser() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan Yeow Heong';
+        $data['userPassword'] = 'horse';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::namePasswordError,$result->code());
+    }
+
+    public function testWrongPassword() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan';
+        $data['userPassword'] = 'horsedogdragonbull';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::namePasswordError,$result->code());
+    }
+
+    public function testLoginDisabledUser() {
+        $data = array();
+        $data['userName'] = 'Johnson Tan';
+        $data['userPassword'] = 'snake';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::accountError,$result->code());
+    }
+
+    public function testAddNewUser() {
+        $data = $this->goodDataArray;
+        $result = UserService::signup($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+    }
+
+    public function testAddUserWithExistingName() {
+        $data = $this->goodDataArray;
+        $data['userName'] = 'Angel Tan';
+        $result = UserService::signup($data);
+        $this->assertEquals(UserService::duplicateNameError,$result->code());
+    }
+
+    public function testAddUserWithExistingEmail() {
+        $data = $this->goodDataArray;
+        $data['userEmail'] = 'dog@mac.com';
+        $data['userEmailConfirm'] = 'dog@mac.com';
+        $result = UserService::signup($data);
+        $this->assertEquals(UserService::duplicateNameError,$result->code());
+    }
+
 }
 ?>
