@@ -89,10 +89,7 @@ class UserService {
         }
         try {
             $user = self::fetchUser($data['userName']);
-            if ($user['id']==6) {
-                var_dump($user);
-            }
-            /* No such user */
+             /* No such user */
             if (!$user) {
                 return new JSONResult(self::namePasswordError,'Name or password does not match records.');
             }
@@ -107,6 +104,7 @@ class UserService {
         } catch (Exception $e) {
             return new JSONResult(self::unknownError,$e->getMessage());
         }
+        self::updateLoginTime($data['userName']);
         return new JSONResult(self::resultOk,'Ok user logged in.');
     }
 
@@ -163,6 +161,14 @@ class UserService {
         return $row;
     }
 
+    protected static function updateLoginTime($name) {
+        $db = self::DB();
+        $sql = 'update users set lastLogin = now() where name = :name';
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':name',$name);
+        $stmt->execute();
+        return ($stmt->rowCount()==1);
+    }
 }
 
 ?>
