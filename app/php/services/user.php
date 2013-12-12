@@ -18,6 +18,7 @@ class UserService {
     const nonMatchingPasswordError = 5;
     const missingFieldError = 6;
     const namePasswordError = 7;
+    const accountError = 8;
 
     protected static $db;
 
@@ -80,13 +81,27 @@ class UserService {
 
     public static function login($data) {
         /* error code: 0 message: 'user logged in' */
-        /* error code: 6 message: 'name or password is missing */
-        /* error code: 7 message: 'user not found or password mismatched */
+        /* error code: 6 message: 'name or password is missing' */
+        /* error code: 7 message: 'user not found or password mismatched' */
+        /* error code: 8 message: 'account is disabled' */
         if (!self::verifyDataFields($data,self::loginProperties())) {
             return new JSONResult(self::missingFieldError,'Name or password is missing.');
         }
         try {
-            if (!self::authenticate($data['userName'],$data['userPassword'])) {
+            $user = self::fetchUser($data['userName']);
+            if ($user['id']==6) {
+                var_dump($user);
+            }
+            /* No such user */
+            if (!$user) {
+                return new JSONResult(self::namePasswordError,'Name or password does not match records.');
+            }
+            /* Account disabled */
+            if (intval($user['enabled'])==0) {
+                return new JSONResult(self::accountError,'Account is diabled.');
+            }
+            /* Authentication failed */
+            if (!Authentication::authenticate($data['userPassword'],$user['password'],$user['salt'])) {
                 return new JSONResult(self::namePasswordError,'Name or password does not match records.');
             }
         } catch (Exception $e) {
@@ -129,7 +144,7 @@ class UserService {
     protected static function addUserToDatabase($data) {
         $securePasswordHash = Authentication::hash($data['userPassword']);
         $db = self::DB();
-        $sql = 'insert into users (name, email, password, salt) values (:name, :email, :password, :salt)';
+        $sql = 'insert into users (name, email, password, salt, permission, enabled) values (:name, :email, :password, :salt, 1, 1)';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$data['userName'],PDO::PARAM_STR, 40);        
         $stmt->bindParam(':email',$data['userEmail'],PDO::PARAM_STR, 40);        
@@ -138,19 +153,16 @@ class UserService {
         $stmt->execute();
     }
     
-    protected static function authenticate($name,$password) {
+    protected static function fetchUser($name) {
         $db = self::DB();
         $sql = 'select * from users where name = :name';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$name);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$row) {
-            // No matches for the name
-            return false;
-        }
-        return Authentication::authenticate($password,$row['password'],$row['salt']);
+        return $row;
     }
+
 }
 
 ?>
