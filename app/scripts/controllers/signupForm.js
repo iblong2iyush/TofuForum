@@ -21,8 +21,8 @@
             Msgbox.info(data.message);
             Util.gotoUrl('/login');
         };
-        var failureCallback = function(data){
-            Msgbox.alert('An unexpected network error has occurred: '+data);
+        var failureCallback = function(data,status){
+            Msgbox.alert('A Http Error (' + status + ') has occurred.');
         };
         $scope.signup = function(form) {
             $scope.hasSubmitted = true;

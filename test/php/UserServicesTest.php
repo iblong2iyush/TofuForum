@@ -131,5 +131,62 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
         $this->assertEquals(UserService::duplicateNameError,$result->code());
     }
 
+    public function testChangePasswordOk() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan';
+        $data['userPassword'] = 'horse';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+        $passwordData = array();
+        $passwordData['userCurrentPassword']='horse';
+        $passwordData['userNewPassword'] = 'pony';        
+        $passwordData['userNewPasswordConfirm'] = 'pony';
+        $result = UserService::password($passwordData);
+        $this->assertEquals(UserService::resultOk,$result->code(),$result->message());
+        $result = UserService::logout();
+        $this->assertEquals(UserService::resultOk,$result->code());
+        $data['userPassword'] = 'pony';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+    }        
+
+    public function testChangePasswordNoLogin() {
+        $passwordData = array();
+        $passwordData['userCurrentPassword']='horse';
+        $passwordData['userNewPassword'] = 'pony';        
+        $passwordData['userNewPasswordConfirm'] = 'pony';
+        $result = UserService::password($passwordData);
+        $this->assertEquals(UserService::unauthenticatedError,$result->code(),$result->message());
+    }        
+
+    public function testChangePasswordCurrentPasswordWrong() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan';
+        $data['userPassword'] = 'horse';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+        $passwordData = array();
+        $passwordData['userCurrentPassword']='horsey';
+        $passwordData['userNewPassword'] = 'pony';        
+        $passwordData['userNewPasswordConfirm'] = 'pony';
+        $result = UserService::password($passwordData);
+        $this->assertEquals(UserService::namePasswordError,$result->code(),$result->message());
+    }        
+
+    public function testChangePasswordNewPasswordMismatched() {
+        $data = array();
+        $data['userName'] = 'Jerome Chan';
+        $data['userPassword'] = 'horse';
+        $result = UserService::login($data);
+        $this->assertEquals(UserService::resultOk,$result->code());
+        $passwordData = array();
+        $passwordData['userCurrentPassword']='horse';
+        $passwordData['userNewPassword'] = 'pony1';        
+        $passwordData['userNewPasswordConfirm'] = 'pony2';
+        $result = UserService::password($passwordData);
+        $this->assertEquals(UserService::nonMatchingPasswordError,$result->code(),$result->message());
+    }        
+        
+
 }
 ?>

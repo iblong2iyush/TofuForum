@@ -6,9 +6,6 @@
 
     angular.module('tofuForumApp')
         .controller('MainCtrl',['$scope','Authentication','Msgbox','Util',function ($scope,Authentication,Msgbox,Util) {
-            $scope.passwords = function() {
-                console.log('Passwords is activated');
-            };
             $scope.logout = function() {
                 Authentication.logout(
                     function(data,status){

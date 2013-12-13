@@ -19,6 +19,7 @@ class UserService {
     const missingFieldError = 6;
     const namePasswordError = 7;
     const accountError = 8;
+    const unauthenticatedError = 9;
 
     protected static $db;
 
@@ -105,7 +106,65 @@ class UserService {
             return new JSONResult(self::unknownError,$e->getMessage());
         }
         self::updateLoginTime($data['userName']);
+        self::storeUserInSession($user);
         return new JSONResult(self::resultOk,'Ok user logged in.');
+    }
+
+    public static function logout() {
+        try {
+            session_start();
+            $_SESSION = array();
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+                );
+            }
+            session_destroy();
+        } catch (Exception $e) {
+            return new JSONResult(self::unknownError,$e->getMessage());
+        }
+        return new JSONResult(self::resultOk,'Ok user logged out');
+    }
+
+    public static function password($data) {
+        try {
+            if (!self::isUserLoggedIn()) {
+                return new JSONResult(self::unauthenticatedError,'User is not authenticated');
+            }
+            if (!self::verifyDataFields($data,self::passwordProperties())) {
+                return new JSONResult(self::missingFieldError,'Field is missing.');
+            }
+            if ($data['userNewPassword']!=$data['userNewPasswordConfirm']) {
+                return new JSONResult(self::nonMatchingPasswordError,'Passwords do not match');
+            }
+            
+            /* use cached user data or should we fetch the user data again? */
+            $cachedUser = self::getUserFromSession();
+            $user = self::fetchUser($cachedUser['name']);
+            if (!$user) {
+                return new JSONResult(self::namePasswordError,'Account does not appear in database.');
+            }
+            /* Account disabled */
+            if (intval($user['enabled'])==0) {
+                return new JSONResult(self::accountError,'Account is diabled.');
+            }
+            /* confirm password matches */
+            if (!Authentication::authenticate($data['userCurrentPassword'],$user['password'],$user['salt'])) {
+                return new JSONResult(self::namePasswordError,'Entered current password does not match stored password.');
+            }
+            /* cleared all checks, generate new salt and hash */
+            $result = Authentication::hash($data['userNewPassword']);
+            
+            /* update database */
+            $user['password'] = $result['hash'];
+            $user['salt'] = $result['salt'];
+            self::updateUser($user);
+        } catch (Exception $e) {
+            return new JSONResult(self::unknownError,$e->getMessage());
+        }
+        return new JSONResult(self::resultOk,'Ok Password changed.');
     }
 
     protected static function signUpProperties() {
@@ -114,6 +173,10 @@ class UserService {
 
     protected static function loginProperties() {
         return ['userName','userPassword'];
+    }
+
+    protected static function passwordProperties() {
+        return ['userCurrentPassword','userNewPassword','userNewPasswordConfirm'];
     }
 
     protected static function verifyDataFields($data,$properties) {
@@ -137,6 +200,18 @@ class UserService {
             return false;
         }
         return true;
+    }
+
+    protected static function storeUserInSession($data) {
+        $_SESSION['user'] = $data;
+    }
+
+    protected static function getUserFromSession() {
+        return $_SESSION['user'];
+    }
+
+    protected static function isUserLoggedIn() {
+        return isset($_SESSION['user']);
     }
 
     protected static function addUserToDatabase($data) {
@@ -169,6 +244,20 @@ class UserService {
         $stmt->execute();
         return ($stmt->rowCount()==1);
     }
+
+    protected static function updateUser($user) {
+        $db = self::DB();
+        $sql = 'update users set name = :name, password = :password, salt = :salt, email = :email, updated = NOW() where id = :id';
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':name',$user['name']);
+        $stmt->bindParam(':password',$user['password']);
+        $stmt->bindParam(':salt',$user['salt']);
+        $stmt->bindParam(':email',$user['email']);
+        $stmt->bindParam(':id',$user['id']);
+        $stmt->execute();
+        return ($stmt->rowCount()==1);
+    }
+
 }
 
 ?>

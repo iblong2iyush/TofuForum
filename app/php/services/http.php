@@ -7,6 +7,10 @@ class Http {
         return $results;
     }
 
+    public static function json_header() {
+        header('Content-Type: application/json');
+    }
+
 }
 
 ?>

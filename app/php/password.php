@@ -1,7 +1,7 @@
 <?php
 require_once('autoloader.php');
 session_start();
-Http::json_header();
+Http::JSONHeader();
 UserService::setDB(Database::db());
-echo UserService::login(Http::post_json());
+echo UserService::password(Http::post_json);
 ?>

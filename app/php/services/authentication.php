@@ -15,7 +15,7 @@ class Authentication {
         $digest = openssl_digest($saltedPassword,'sha512');
         return $hash === $digest;
     }
-    
+
     protected static function randomSalt() {
         $cstrong = false;
         while (!$cstrong) {        
