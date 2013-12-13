@@ -31,6 +31,10 @@
                     templateUrl: 'views/main.html',
                     controller: 'MainCtrl'
                 })
+                .when('/password', {
+                    templateUrl: 'views/password.html',
+                    controller: 'PasswordCtrl'
+                })
                 .otherwise({
                     redirectTo: '/login'
                 });
