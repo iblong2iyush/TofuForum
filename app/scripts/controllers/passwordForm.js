@@ -15,7 +15,7 @@
                 Msgbox.alert('Please fill out all fields');
                 return;
             }
-            Userbackend.changePasswords(
+            Userbackend.changePassword(
                 $scope.user,
                 function(data,status){
                     if (status!==200) {
@@ -26,7 +26,7 @@
                         Msgbox.alert(data.message);
                         return;
                     }
-                    Util.gotoUrl('/');
+                    Util.gotoUrl('/main');
                 },
                 function(data,status){
                     Msgbox.alert('A Http Error (' + status + ') has occurred.');

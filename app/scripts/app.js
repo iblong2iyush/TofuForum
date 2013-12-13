@@ -15,10 +15,6 @@
             $routeProvider,
             $locationProvider) {
             $routeProvider
-                .when('/', {
-                    templateUrl: 'views/main.html',
-                    controller: 'MainCtrl'
-                })
                 .when('/login', {
                     templateUrl: 'views/login.html',
                     controller: 'LoginCtrl'
@@ -36,7 +32,7 @@
                     controller: 'PasswordCtrl'
                 })
                 .otherwise({
-                    redirectTo: '/login'
+                    redirectTo: '/main'
                 });
             $locationProvider.html5Mode(false).hashPrefix('');
         })

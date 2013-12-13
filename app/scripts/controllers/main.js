@@ -6,6 +6,7 @@
 
     angular.module('tofuForumApp')
         .controller('MainCtrl',['$scope','Authentication','Msgbox','Util',function ($scope,Authentication,Msgbox,Util) {
+            $scope.gotoUrl = Util.gotoUrl;
             $scope.logout = function() {
                 Authentication.logout(
                     function(data,status){
@@ -17,7 +18,7 @@
                             Msgbox.alert(data.message);
                             return;
                         }
-                        Util.gotoUrl('/');
+                        Util.gotoUrl('/logout');
                     },
                     function(data,status){
                         if (status===404) {
