@@ -5,18 +5,37 @@
     'use strict';
 
     angular.module('tofuForumApp')
-        .controller('MainCtrl', ['$scope',function ($scope) {
-
+        .controller('MainCtrl',['$scope','Authentication','Msgbox','Util',function ($scope,Authentication,Msgbox,Util) {
             $scope.passwords = function() {
                 console.log('Passwords is activated');
             };
-
             $scope.logout = function() {
-                console.log('Logout is activated');
+                Authentication.logout(
+                    function(data,status){
+                        if (status!==200) {
+                            Msgbox.alert('HTTP Code:'+status+' is not normal');
+                            return;
+                        }
+                        if (data.code!==0) {
+                            Msgbox.alert(data.message);
+                            return;
+                        }
+                        Util.gotoUrl('/');
+                    },
+                    function(data,status){
+                        if (status===404) {
+                            Msgbox.alert('Logout script is missing.');
+                            return;
+                        }
+                        if (status===500) {
+                            Msgbox.alert('Server internal error.');
+                            return;
+                        }
+                        Msgbox.alert('HTTP Error: '+status);
+                        return;
+                    }
+                );
             };
-
-            console.log('MainCtrl is activated');
-            
         }]);
 
 })();
