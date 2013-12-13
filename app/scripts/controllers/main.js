@@ -5,8 +5,18 @@
     'use strict';
 
     angular.module('tofuForumApp')
-        .controller('MainCtrl', ['$scope','Authentication',function ($scope,$authentication) {
-            $scope.authentication = $authentication;
+        .controller('MainCtrl', ['$scope',function ($scope) {
+
+            $scope.passwords = function() {
+                console.log('Passwords is activated');
+            };
+
+            $scope.logout = function() {
+                console.log('Logout is activated');
+            };
+
+            console.log('MainCtrl is activated');
+            
         }]);
 
 })();

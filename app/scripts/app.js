@@ -5,7 +5,6 @@
     'use strict';
     
     angular.module('tofuForumApp', [
-        'ngAnimate-animate.css',
         'ui.bootstrap',
         'ngCookies',
         'ngResource',
@@ -30,7 +29,7 @@
                 })
                 .when('/main', {
                     templateUrl: 'views/main.html',
-                    controller: 'MessageCtrl'
+                    controller: 'MainCtrl'
                 })
                 .otherwise({
                     redirectTo: '/login'

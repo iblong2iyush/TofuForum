@@ -1,8 +1,13 @@
 <div class="navbar">
   <div class="navbar-inner">
-    <a class="brand">TofuForums</a>
+    <a class="brand pointer-default">TofuForums</a>
     <ul class="nav pull-right">
-      <li><a>Options</a></li>
+      <li>
+        <a class="dropdown-toggle pointer-default">Options</a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="passwords()">Passwords</a></li>
+          <li><a ng-click="logout()">Logout</a></li>
+      </li>
     </ul>
   </div>
 </div>
