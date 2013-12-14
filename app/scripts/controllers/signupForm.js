@@ -9,6 +9,7 @@
         $scope.hasSubmitted = false;
         $scope.user = {};
         $scope.gotoUrl = Util.gotoUrl;
+        $scope.goBack = Util.goBack;
         var successCallback = function(data,status){
             if (status!==200) {
                 Msgbox.alert(data.message);

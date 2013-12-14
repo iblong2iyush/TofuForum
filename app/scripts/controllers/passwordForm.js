@@ -9,6 +9,7 @@
 
         $scope.user = {};
         $scope.gotoUrl = Util.gotoUrl;
+        $scope.goBack = Util.goBack;
 
         $scope.changePassword = function(form) {
             if (!form.$valid) {
