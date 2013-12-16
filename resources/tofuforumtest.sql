@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2013 at 04:25 PM
+-- Generation Time: Dec 16, 2013 at 03:27 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -19,8 +19,25 @@ SET time_zone = "+00:00";
 --
 -- Database: `tofuforumtest`
 --
-CREATE DATABASE IF NOT EXISTS `tofuforumtest` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `tofuforumtest` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `tofuforumtest`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forums`
+--
+
+DROP TABLE IF EXISTS `forums`;
+CREATE TABLE `forums` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ownerId` int(11) NOT NULL,
+  `enabled` int(11) NOT NULL,
+  `open` int(11) NOT NULL,
+  `name` char(40) CHARACTER SET latin1 NOT NULL,
+  `description` text CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -29,7 +46,7 @@ USE `tofuforumtest`;
 --
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(40) COLLATE utf8_unicode_ci NOT NULL,
   `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
