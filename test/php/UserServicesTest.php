@@ -186,7 +186,6 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
         $result = UserService::password($passwordData);
         $this->assertEquals(UserService::nonMatchingPasswordError,$result->code(),$result->message());
     }        
-        
 
 }
 ?>
