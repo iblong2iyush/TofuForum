@@ -1,16 +1,16 @@
-<div class="navbar">
+<div class="navbar" ng-controller="MenubarCtrl">
   <div class="navbar-inner">
     <a class="brand pointer-default">TofuForums</a>
     <ul class="nav pull-left">
-      <li class="active"><a ng-click="">Main</a></li>
-      <li class=""><a class="pointer-default" ng-click="">Published</a></li>
-      <li class=""><a ng-click="">Subscribed</a></li>
+      <li class=""><a>Main</a></li>
+      <li class=""><a>Published</a></li>
+      <li class=""><a>Subscribed</a></li>
     </ul>
     <ul class="nav pull-right">
       <li>
         <a class="dropdown-toggle pointer-default">Options</a>
         <ul class="dropdown-menu">
-          <li><a ng-click="gotoUrl('/password')">Passwords</a></li>
+          <li><a ng-click="navigation.gotoUrl('/password')">Passwords</a></li>
           <li><a ng-click="logout()">Logout</a></li>
       </li>
     </ul>
