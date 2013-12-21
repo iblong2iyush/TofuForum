@@ -6,17 +6,9 @@
 
     var module = angular.module('tofuForumApp');
 
-    module.factory('Util',function($location,$window){
+    module.factory('Util',function(){
 
         var service = {};
-
-        service.gotoUrl = function(url) {
-            $location.path(url);
-        };
-
-        service.goBack = function() {
-            $window.history.back();
-        };
 
         service.stringStartsWith = function(source,head) {
             return source.lastIndexOf(head,0)===0;
