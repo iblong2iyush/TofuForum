@@ -5,7 +5,7 @@
     'use strict';
 
     var module = angular.module('tofuForumApp');
-    module.controller('LoginformCtrl', function ($scope,Util,Msgbox,Authentication) {
+    module.controller('LoginformCtrl', function ($scope,Navigation,Msgbox,Authentication) {
         $scope.login = function(form) {
             if (!form.$valid) {
                 Msgbox.alert('Please fill in all fields');
@@ -18,11 +18,9 @@
                         Msgbox.alert(data.message);
                         return;
                     }
-                    // success
-                    Util.gotoUrl('/main');
+                    Navigation.gotoFailedRouteOrHere('/main');
                 },
                 function(data){
-                    // error
                     Msgbox.alert(data.message);
                 });
         };

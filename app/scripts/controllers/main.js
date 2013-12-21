@@ -5,8 +5,8 @@
     'use strict';
 
     angular.module('tofuForumApp')
-        .controller('MainCtrl',['$scope','Authentication','Msgbox','Util',function ($scope,Authentication,Msgbox,Util) {
-            $scope.gotoUrl = Util.gotoUrl;
+        .controller('MainCtrl',['$scope','Authentication','Msgbox','Navigation',function ($scope,Authentication,Msgbox,Navigation) {
+            $scope.Navigation = Navigation;
             $scope.logout = function() {
                 Authentication.logout(
                     function(data,status){
@@ -18,7 +18,7 @@
                             Msgbox.alert(data.message);
                             return;
                         }
-                        Util.gotoUrl('/logout');
+                        Navigation.gotoUrl('/logout');
                     },
                     function(data,status){
                         if (status===404) {

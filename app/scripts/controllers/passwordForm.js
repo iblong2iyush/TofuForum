@@ -5,11 +5,10 @@
     'use strict';
 
     var module = angular.module('tofuForumApp');
-    module.controller('PasswordformCtrl',function ($scope,Userbackend,Util,Msgbox) {
+    module.controller('PasswordformCtrl',function ($scope,Userbackend,Navigation,Msgbox) {
 
         $scope.user = {};
-        $scope.gotoUrl = Util.gotoUrl;
-        $scope.goBack = Util.goBack;
+        $scope.navigation = Navigation;
 
         $scope.changePassword = function(form) {
             if (!form.$valid) {
@@ -27,7 +26,7 @@
                         Msgbox.alert(data.message);
                         return;
                     }
-                    Util.gotoUrl('/main');
+                    Navigation.gotoUrl('/main');
                 },
                 function(data,status){
                     Msgbox.alert('A Http Error (' + status + ') has occurred.');

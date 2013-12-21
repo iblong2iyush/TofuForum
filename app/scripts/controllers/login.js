@@ -5,10 +5,10 @@
     'use strict';
 
     angular.module('tofuForumApp')
-        .controller('LoginCtrl', ['$scope','Util',function (
+        .controller('LoginCtrl', ['$scope','Navigation',function (
             $scope,
-            $util) {
-            $scope.gotoUrl = $util.gotoUrl;
+            Navigation) {
+            $scope.navigation = Navigation;
         }]);
 
 })();
