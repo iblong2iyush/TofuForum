@@ -5,11 +5,10 @@
     'use strict';
     
     var module = angular.module('tofuForumApp');
-    module.controller('SignupformCtrl',function($scope,Util,Userbackend,Msgbox) {
+    module.controller('SignupformCtrl',function($scope,Navigation,Userbackend,Msgbox) {
         $scope.hasSubmitted = false;
         $scope.user = {};
-        $scope.gotoUrl = Util.gotoUrl;
-        $scope.goBack = Util.goBack;
+        $scope.navigation = Navigation;
         var successCallback = function(data,status){
             if (status!==200) {
                 Msgbox.alert(data.message);
@@ -20,7 +19,7 @@
                 return;
             }
             Msgbox.info(data.message);
-            Util.gotoUrl('/login');
+            Navigation.gotoUrl('/login');
         };
         var failureCallback = function(data,status){
             Msgbox.alert('A Http Error (' + status + ') has occurred.');
