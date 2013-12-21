@@ -1,9 +1,10 @@
-// jshint indent:4
+// jshint indent: 4
 // jshint bitwise: false
 
 (function(){
 
     'use strict';
+
     var installIndexOfFunctionIfMissing = function() {
         if (!Array.prototype.indexOf) {
             Array.prototype.indexOf = function (obj, fromIndex) {
@@ -23,61 +24,102 @@
     };
     
     var module = angular.module('tofuForumApp');
-    module.factory('Navigation', function Navigation($location,$rootScope,Authentication) {
+    module.factory('Navigation', function Navigation($location,$route,$rootScope,Authentication) {
         installIndexOfFunctionIfMissing();
+        var failedRoute = '';
         var history = [];
         var defaultRoute = '/';
         var safeRoutes = [];
+        var isGoingBack = false;
+
         var routeNeedsAuthentication = function(route) {
-            for (var index=0; index<safeRoutes.length; index++ ) {
+            for (var index = 0; index < safeRoutes.length; index++ ) {
                 if (safeRoutes[index] === route) {
                     return false;
                 }
             }
             return true;
         };
+
+        var originalPathInRouteIsValid = function(route) {
+            if (typeof route === 'undefined') {
+                return false;
+            }
+            if (typeof route.originalPath === 'undefined') {
+                return false;
+            }
+            return true;
+        };
+
+        var pushOriginalPathIntoHistory = function(route) {
+            if (isGoingBack) {
+                isGoingBack = false;
+                return;
+            }
+            if (originalPathInRouteIsValid(route)) {
+                history.push(route.originalPath);
+            }
+        };
+
         var service = {
-            gotoUrl: function(url) {
-                $location.path(url);
+            gotoUrl: function(gotoUrl) {
+                $location.path(gotoUrl);
             },
             goBack: function() {
-                if (history.length===0) {
-                    return service.gotoUrl(service.getDefaultRoute());
+                var returnUrl;
+                if (history.length === 0) {
+                    returnUrl = service.getDefaultRoute();
+                } else {
+                    returnUrl = history.pop();
                 }
-                var returnUrl = history.pop();
-                return service.gotoUrl(returnUrl);
+                isGoingBack = true;
+                service.gotoUrl(returnUrl);
+                return;
             },
-            setDefaultRoute: function(route) {
-                defaultRoute = route;
+            setDefaultRoute: function(newRoute) {
+                defaultRoute = newRoute;
             },
             getDefaultRoute: function(){
                 return defaultRoute;
             },
-            addSafeRoute: function(route) {
-                safeRoutes.push(route);
+            addSafeRoute: function(newRoute) {
+                safeRoutes.push(newRoute);
             },
-            removeSafeRoute: function(route) {
-                var index = safeRoutes.indexOf(route);
+            removeSafeRoute: function(existingRoute) {
+                var index = safeRoutes.indexOf(existingRoute);
                 safeRoutes.splice(index,1);
+            },
+            gotoFailedRouteOrHere: function(url) {
+                var route = url;
+                if (failedRoute!=='') {
+                    route = failedRoute;
+                    failedRoute = '';
+                }
+                service.gotoUrl(route);
             }
             
         };
 
-        $rootScope.$on('$routeChangeSuccess', function(event,current/*,previous*/) {
-            history.push(current);
-        });
-
-        $rootScope.$on('$routeChangeStart', function (event,next/*,current*/) {
+        $rootScope.$on('$routeChangeStart', function (event,next,current) {
+            
             if (Authentication.authenticated) {
+                pushOriginalPathIntoHistory(current);
                 return;
             }
-            if (!routeNeedsAuthentication(next)){
-                return;
+            
+            // move the originalPathInRouteIsValid check into the functions
+            if (originalPathInRouteIsValid(next)){
+                if (!routeNeedsAuthentication(next.originalPath)) {
+                    pushOriginalPathIntoHistory(current);
+                    return;
+                }
+                failedRoute = next.originalPath;
             }
             service.gotoUrl(service.getDefaultRoute());
         });
-
+        
         return service;
+        
     });
 
 })();

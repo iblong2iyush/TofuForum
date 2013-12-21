@@ -10,13 +10,17 @@
         beforeEach(module('tofuForumApp'));
         
         // instantiate service
-        var Authentication,loginUrl,logoutUrl;
-        beforeEach(inject(['Authentication','loginUrl','logoutUrl',function (_Authentication_,_loginUrl_,_logoutUrl_) {
+        var Authentication,loginUrl,logoutUrl,$templateCache;
+        beforeEach(inject(['Authentication','loginUrl','logoutUrl','$templateCache',function (_Authentication_,_loginUrl_,_logoutUrl_,_templateCache_) {
             Authentication = _Authentication_;
             loginUrl = _loginUrl_;
             logoutUrl = _logoutUrl_;
+            $templateCache = _templateCache_;
+            $templateCache.put('views/signup.html', 'Signup View Template');
+            $templateCache.put('views/login.html', 'Login View Template');
+            $templateCache.put('views/main.html', 'Main View Template');
         }]));
-     
+        
         // set up httpbackend
         var $httpBackend;
         beforeEach(inject(['$httpBackend',function(backend) {
@@ -24,6 +28,7 @@
         }]));
 
         var jsonResponse;
+
         afterEach(function() {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
@@ -126,7 +131,7 @@
             expect(success).toBe(false);
             expect(failure).toBe(true);
         });
-        
+  
         
     });
 
