@@ -37,6 +37,10 @@
                 templateUrl: 'views/password.html',
                 controller: 'PasswordCtrl'
             })
+            .when('/logout', {
+                templateUrl: 'views/logout.html'
+                //controller: 'MainCtrl'
+            })
             .otherwise({
                 redirectTo: '/main'
             });
@@ -46,6 +50,7 @@
             Navigation){
             Navigation.addSafeRoute('/login');
             Navigation.addSafeRoute('/signup');
+            Navigation.addSafeRoute('/logout');
             Navigation.setDefaultRoute('/login');
         });
     

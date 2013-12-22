@@ -2,16 +2,16 @@
   <div class="navbar-inner">
     <a class="brand pointer-default">TofuForums</a>
     <ul class="nav pull-left">
-      <li ng-class="activeTab('/main')"><a ng-class="activeCursor('/main')" ng-click="goTab('/main')">Main</a></li>
-      <li ng-class="activeTab('/published')"><a  ng-class="activeCursor('/published')" ng-click="goTab('/published')">Published</a></li>
-      <li ng-class="activeTab('/subscribed')"><a  ng-class="activeCursor('/subscribed')" ng-click="goTab('/subscribed')">Subscribed</a></li>
+      <li ng-class="activeTab('/main')"><a id="main-menu-item" ng-class="activeCursor('/main')" ng-click="goTab('/main')">Main</a></li>
+      <li ng-class="activeTab('/published')"><a id="publish-menu-item" ng-class="activeCursor('/published')" ng-click="goTab('/published')">Published</a></li>
+      <li ng-class="activeTab('/subscribed')"><a id="subscribe-menu-item" ng-class="activeCursor('/subscribed')" ng-click="goTab('/subscribed')">Subscribed</a></li>
     </ul>
     <ul class="nav pull-right">
       <li>
         <a class="dropdown-toggle pointer-default">Options</a>
         <ul class="dropdown-menu">
-          <li><a ng-click="navigation.gotoUrl('/password')">Passwords</a></li>
-          <li><a ng-click="logout()">Logout</a></li>
+          <li><a id="password-menu-item" ng-click="navigation.gotoUrl('/password')">Passwords</a></li>
+          <li><a id="logout-menu-item" ng-click="logout()">Logout</a></li>
       </li>
     </ul>
   </div>

@@ -20,6 +20,7 @@
                         Msgbox.alert(data.message);
                         return;
                     }
+                    console.log('WE LOG OUT');
                     Navigation.gotoUrl('/logout');
                 },
                 function(data,status){

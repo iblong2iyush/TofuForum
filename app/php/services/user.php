@@ -258,6 +258,15 @@ class UserService {
         return ($stmt->rowCount()==1);
     }
 
+    // Test method for e2e karma testing
+
+    public static function removeTempUser() {
+        $db = self::DB();
+        $sql = 'delete from users where name = \'dummy user\'';
+        $db->exec($sql);
+        return true;
+    }
+
 }
 
 ?>
