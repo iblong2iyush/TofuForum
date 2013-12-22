@@ -2,9 +2,9 @@
   <div class="navbar-inner">
     <a class="brand pointer-default">TofuForums</a>
     <ul class="nav pull-left">
-      <li class=""><a>Main</a></li>
-      <li class=""><a>Published</a></li>
-      <li class=""><a>Subscribed</a></li>
+      <li ng-class="activeTab('/main')"><a ng-class="activeCursor('/main')" ng-click="goTab('/main')">Main</a></li>
+      <li ng-class="activeTab('/published')"><a  ng-class="activeCursor('/published')" ng-click="goTab('/published')">Published</a></li>
+      <li ng-class="activeTab('/subscribed')"><a  ng-class="activeCursor('/subscribed')" ng-click="goTab('/subscribed')">Subscribed</a></li>
     </ul>
     <ul class="nav pull-right">
       <li>

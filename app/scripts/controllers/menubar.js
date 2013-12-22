@@ -5,8 +5,10 @@
     'use strict';
 
     var module = angular.module('tofuForumApp');
-    module.controller('MenubarCtrl', function ($scope,Navigation,Msgbox,Authentication) {
+    module.controller('MenubarCtrl', function ($scope,$location,Navigation,Msgbox,Authentication) {
+
         $scope.navigation = Navigation;
+
         $scope.logout = function() {
             Authentication.logout(
                 function(data,status){
@@ -33,6 +35,24 @@
                     return;
                 }
             );
+        };
+
+        $scope.activeTab = function(location) {
+            return {
+                'active': ($location.path()===location)
+            };
+        };
+
+        $scope.activeCursor = function(location) {
+            return {
+                'pointer-default': ($location.path()!==location)
+            };
+        };
+
+        $scope.goTab = function(target) {
+            if ($location.path()!==target) {
+                Navigation.gotoUrl(target);
+            }
         };
 
     });
