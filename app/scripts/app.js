@@ -13,17 +13,25 @@
     ]);
     module.config(function ($routeProvider,$locationProvider) {
         $routeProvider
-            .when('/login', {
-                templateUrl: 'views/login.html',
-                controller: 'LoginCtrl'
-            })
             .when('/signup', {
                 templateUrl: 'views/signup.html',
                 controller: 'SignupCtrl'
             })
+            .when('/login', {
+                templateUrl: 'views/login.html',
+                controller: 'LoginCtrl'
+            })
             .when('/main', {
                 templateUrl: 'views/main.html',
                 controller: 'MainCtrl'
+            })
+            .when('/published', {
+                templateUrl: 'views/published.html'
+                //controller: 'MainCtrl'
+            })
+            .when('/subscribed', {
+                templateUrl: 'views/subscribed.html'
+                //controller: 'MainCtrl'
             })
             .when('/password', {
                 templateUrl: 'views/password.html',
