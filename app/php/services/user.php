@@ -262,7 +262,7 @@ class UserService {
 
     public static function removeTempUser() {
         $db = self::DB();
-        $sql = 'delete from users where name = \'dummy user\'';
+        $sql = 'delete from users where name like \'dummy user%\'';
         $db->exec($sql);
         return true;
     }
