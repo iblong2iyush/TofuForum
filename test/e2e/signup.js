@@ -51,7 +51,7 @@
             expect(element('div.alert div span').text()).toMatch('Please fill out all fields');
         });            
 
-        it('Sign up with dummy user, name, email, mismatch password ok',function(){
+        it('Sign up with dummy user, name, email, mismatch password',function(){
             input('user.userName').enter(user.name);
             input('user.userEmail').enter(user.email);
             input('user.userEmailConfirm').enter(user.email);
@@ -62,7 +62,7 @@
             expect(element('div.alert div span').text()).toMatch('Passwords did not match');
         });            
 
-        it('Sign up with dummy user, name, mismatch email, mismatch password ok',function(){
+        it('Sign up with dummy user, name, mismatch email, mismatch password',function(){
             input('user.userName').enter(user.name);
             input('user.userEmail').enter(user.email+'1');
             input('user.userEmailConfirm').enter(user.email);
