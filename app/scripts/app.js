@@ -9,7 +9,8 @@
         'ngCookies',
         'ngResource',
         'ngSanitize',
-        'ngRoute'
+        'ngRoute',
+        'ngGrid'
     ]);
     module.config(function ($routeProvider,$locationProvider) {
         $routeProvider
