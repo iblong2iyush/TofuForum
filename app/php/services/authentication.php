@@ -1,4 +1,5 @@
 <?php
+
 class Authentication {
 
     public static function hash($password) {
@@ -26,4 +27,5 @@ class Authentication {
     }
 
 }
+
 ?>

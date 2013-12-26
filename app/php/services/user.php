@@ -10,107 +10,87 @@ class UserService {
        Version 0.1
     */
 
-    const resultOk = 0;
-    const sqlError = 1;
-    const duplicateNameError = 2;
-    const unknownError = 3;
-    const nonMatchingEmailError = 4;
-    const nonMatchingPasswordError = 5;
-    const missingFieldError = 6;
-    const namePasswordError = 7;
-    const accountError = 8;
-    const unauthenticatedError = 9;
+    protected $db;
 
-    protected static $db;
-
-    public static function setDB($db) {
-        self::$db = $db;
+    public function __construct($db) {
+        $this->setDB($db);
     }
     
-    public static function DB() {
-        return self::$db;
+    public function setDB($db) {
+        $this->db = $db;
     }
-    
-    public static function signup($data) {
-
-        /* error code: 0 message: 'user signed up'
-           error code: 1 message: 'sql error' <-- never?
-           error code: 2 message: 'duplicate user name'
-           error code: 3 message: 'unknown error'
-           error code: 4 message: 'non-matching email'
-           error code: 5 message: 'non-matching password'
-           error code: 6 message: 'field is missing'
-        */
+  
+    public function DB() {
+        return $this->db;
+    }
+  
+    public function signup($data) {
 
         try {
             /* confirm all fields are present */
-            if (!self::verifyDataFields($data,self::signUpProperties())) {
-                return new JSONResult(self::missingFieldError,'Field is missing.');
+            if (!$this->verifyDataFields($data,$this->signUpProperties())) {
+                return new JSONResult(Error::missingFieldError,'Field is missing.');
             }
-            
+      
             /* confirm password */
-            if (!self::verifyPassword($data)) {
-                return new JSONResult(self::nonMatchingPasswordError,'Passwords did not match.');
+            if (!$this->verifyPassword($data)) {
+                return new JSONResult(Error::nonMatchingPasswordError,'Passwords did not match.');
             }
-            
+      
             /* confirm email */
-            if (!self::verifyEmail($data)) {
-                return new JSONResult(self::nonMatchingEmailError,'Emails did not match.');
+            if (!$this->verifyEmail($data)) {
+                return new JSONResult(Error::nonMatchingEmailError,'Emails did not match.');
             }
-            
-
+      
             /* TODO check for duplicate email */
-            
+      
             /* TODO check for duplicate name */
 
             /* Add user to database and handle error if any */
             try {
-                self::addUserToDatabase($data);
+                $this->addUserToDatabase($data);
             } catch (PDOException $e) {
                 $err = $e->errorInfo[1];
                 if ($err==1062) {
-                    return new JSONResult(self::duplicateNameError,'Duplicate field ['.$e->errorInfo[2].'].');
+                    return new JSONResult(Error::duplicateNameError,'Duplicate field ['.$e->errorInfo[2].'].');
                 } 
-                return new JSONResult(self::unknownError,$e->errorInfo[2]);
+                return new JSONResult(Error::unknownError,$e->errorInfo[2]);
             }
         } catch (Exception $e) {
-            return new JSONResult(self::unknownError,$e->errorInfo[1].' '.$e->errorInfo[2]);
+            return new JSONResult(Error::unknownError,$e->errorInfo[1].' '.$e->errorInfo[2]);
         }
         /* Everything is ok */
-        return new JSONResult(self::resultOk,'User signed up.');
+        return new JSONResult(Error::resultOk,'User signed up.');
     }
 
-    public static function login($data) {
-        /* error code: 0 message: 'user logged in' */
-        /* error code: 6 message: 'name or password is missing' */
-        /* error code: 7 message: 'user not found or password mismatched' */
-        /* error code: 8 message: 'account is disabled' */
-        if (!self::verifyDataFields($data,self::loginProperties())) {
-            return new JSONResult(self::missingFieldError,'Name or password is missing.');
+    public function login($data) {
+        
+        if (!$this->verifyDataFields($data,$this->loginProperties())) {
+            return new JSONResult(Error::missingFieldError,'Name or password is missing.');
         }
         try {
-            $user = self::fetchUser($data['userName']);
-             /* No such user */
+            $user = $this->fetchUserFromDatabase($data['userName']);
+            /* No such user */
             if (!$user) {
-                return new JSONResult(self::namePasswordError,'Name or password does not match records.');
+                return new JSONResult(Error::namePasswordError,'Name or password does not match records.');
             }
             /* Account disabled */
             if (intval($user['enabled'])==0) {
-                return new JSONResult(self::accountError,'Account is diabled.');
+                return new JSONResult(Error::accountError,'Account is disabled.');
             }
             /* Authentication failed */
             if (!Authentication::authenticate($data['userPassword'],$user['password'],$user['salt'])) {
-                return new JSONResult(self::namePasswordError,'Name or password does not match records.');
+                return new JSONResult(Error::namePasswordError,'Name or password does not match records.');
             }
         } catch (Exception $e) {
-            return new JSONResult(self::unknownError,$e->getMessage());
+            return new JSONResult(Error::unknownError,$e->getMessage());
         }
-        self::updateLoginTime($data['userName']);
-        self::storeUserInSession($user);
-        return new JSONResult(self::resultOk,'Ok user logged in.');
+        $this->updateLoginTimeForUser($data['userName']);
+        $this->storeUserInSession($user);
+        return new JSONResult(Error::resultOk,'Ok user logged in.');
     }
 
-    public static function logout() {
+    public function logout() {
         try {
             session_start();
             $_SESSION = array();
@@ -123,63 +103,76 @@ class UserService {
             }
             session_destroy();
         } catch (Exception $e) {
-            return new JSONResult(self::unknownError,$e->getMessage());
+            return new JSONResult(Error::unknownError,$e->getMessage());
         }
-        return new JSONResult(self::resultOk,'Ok user logged out');
+        return new JSONResult(Error::resultOk,'Ok user logged out');
     }
 
-    public static function password($data) {
+    public function password($data) {
         try {
-            if (!self::isUserLoggedIn()) {
-                return new JSONResult(self::unauthenticatedError,'User is not authenticated');
+            if (!$this->isUserLoggedIn()) {
+                return new JSONResult(Error::unauthenticatedError,'User is not authenticated');
             }
-            if (!self::verifyDataFields($data,self::passwordProperties())) {
-                return new JSONResult(self::missingFieldError,'Field is missing.');
+            if (!$this->verifyDataFields($data,$this->passwordProperties())) {
+                return new JSONResult(Error::missingFieldError,'Field is missing.');
             }
             if ($data['userNewPassword']!=$data['userNewPasswordConfirm']) {
-                return new JSONResult(self::nonMatchingPasswordError,'Passwords do not match');
+                return new JSONResult(Error::nonMatchingPasswordError,'Passwords do not match');
             }
-            
+      
             /* use cached user data or should we fetch the user data again? */
-            $cachedUser = self::getUserFromSession();
-            $user = self::fetchUser($cachedUser['name']);
+            $cachedUser = $this->getUserFromSession();
+            $user = $this->fetchUserFromDatabase($cachedUser['name']);
             if (!$user) {
-                return new JSONResult(self::namePasswordError,'Account does not appear in database.');
+                return new JSONResult(Error::namePasswordError,'Account does not appear in database.');
             }
             /* Account disabled */
             if (intval($user['enabled'])==0) {
-                return new JSONResult(self::accountError,'Account is diabled.');
+                return new JSONResult(Error::accountError,'Account is disabled.');
             }
             /* confirm password matches */
             if (!Authentication::authenticate($data['userCurrentPassword'],$user['password'],$user['salt'])) {
-                return new JSONResult(self::namePasswordError,'Entered current password does not match stored password.');
+                return new JSONResult(Error::namePasswordError,'Entered current password does not match stored password.');
             }
             /* cleared all checks, generate new salt and hash */
             $result = Authentication::hash($data['userNewPassword']);
-            
+      
             /* update database */
             $user['password'] = $result['hash'];
             $user['salt'] = $result['salt'];
-            self::updateUser($user);
+            $this->updateUserInDatabase($user);
         } catch (Exception $e) {
-            return new JSONResult(self::unknownError,$e->getMessage());
+            return new JSONResult(Error::unknownError,$e->getMessage());
         }
-        return new JSONResult(self::resultOk,'Ok Password changed.');
+        return new JSONResult(Error::resultOk,'Ok Password changed.');
     }
 
-    protected static function signUpProperties() {
+    public function isUserOk() {
+        /* Check if user is logged in and is not disabled */
+        if (!$this->isUserLoggedIn()) {
+            return false;
+        }
+        $user = $this->getUserFromSession();
+        return (intval($user['enabled'])==0);
+    }
+
+    public function getUser() {
+        return $this->getUserFromSession();
+    }
+
+    protected function signUpProperties() {
         return ['userName','userEmail','userEmailConfirm','userPassword','userPasswordConfirm'];
     }
 
-    protected static function loginProperties() {
+    protected function loginProperties() {
         return ['userName','userPassword'];
     }
 
-    protected static function passwordProperties() {
+    protected function passwordProperties() {
         return ['userCurrentPassword','userNewPassword','userNewPasswordConfirm'];
     }
 
-    protected static function verifyDataFields($data,$properties) {
+    protected function verifyDataFields($data,$properties) {
         foreach ($properties as $property) {
             if (!array_key_exists($property,$data)) {
                 return false;
@@ -188,46 +181,46 @@ class UserService {
         return true;
     }
 
-    protected static function verifyEmail($data) {
+    protected function verifyEmail($data) {
         if ($data['userEmail']!=$data['userEmailConfirm']) {
             return false;
         }
         return true;
     }
 
-    protected static function verifyPassword($data) {
+    protected function verifyPassword($data) {
         if ($data['userPassword']!=$data['userPasswordConfirm']) {
             return false;
         }
         return true;
     }
 
-    protected static function storeUserInSession($data) {
+    protected function storeUserInSession($data) {
         $_SESSION['user'] = $data;
     }
 
-    protected static function getUserFromSession() {
+    protected function getUserFromSession() {
         return $_SESSION['user'];
     }
 
-    protected static function isUserLoggedIn() {
+    protected function isUserLoggedIn() {
         return isset($_SESSION['user']);
     }
 
-    protected static function addUserToDatabase($data) {
+    protected function addUserToDatabase($data) {
         $securePasswordHash = Authentication::hash($data['userPassword']);
-        $db = self::DB();
+        $db = $this->DB();
         $sql = 'insert into users (name, email, password, salt, permission, enabled) values (:name, :email, :password, :salt, 1, 1)';
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':name',$data['userName'],PDO::PARAM_STR, 40);        
-        $stmt->bindParam(':email',$data['userEmail'],PDO::PARAM_STR, 40);        
+        $stmt->bindParam(':name',$data['userName'],PDO::PARAM_STR, 40);    
+        $stmt->bindParam(':email',$data['userEmail'],PDO::PARAM_STR, 40);    
         $stmt->bindParam(':password',$securePasswordHash['hash'],PDO::PARAM_STR, 128);
         $stmt->bindParam(':salt',$securePasswordHash['salt'],PDO::PARAM_STR, 32);
         $stmt->execute();
     }
-    
-    protected static function fetchUser($name) {
-        $db = self::DB();
+  
+    protected function fetchUserFromDatabase($name) {
+        $db = $this->DB();
         $sql = 'select * from users where name = :name';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$name);
@@ -236,8 +229,8 @@ class UserService {
         return $row;
     }
 
-    protected static function updateLoginTime($name) {
-        $db = self::DB();
+    protected function updateLoginTimeForUser($name) {
+        $db = $this->DB();
         $sql = 'update users set lastLogin = now() where name = :name';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$name);
@@ -245,8 +238,8 @@ class UserService {
         return ($stmt->rowCount()==1);
     }
 
-    protected static function updateUser($user) {
-        $db = self::DB();
+    protected function updateUserInDatabase($user) {
+        $db = $this->DB();
         $sql = 'update users set name = :name, password = :password, salt = :salt, email = :email, updated = NOW() where id = :id';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':name',$user['name']);
@@ -260,8 +253,8 @@ class UserService {
 
     // Test method for e2e karma testing
 
-    public static function removeTempUser() {
-        $db = self::DB();
+    public function removeTempUser() {
+        $db = $this->DB();
         $sql = 'delete from users where name like \'dummy user%\'';
         $db->exec($sql);
         return true;
