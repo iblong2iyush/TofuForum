@@ -3,10 +3,12 @@ class JSONResult {
     
     protected $code;
     protected $message;
+    protected $data;
 
-    public function __construct($errorCode = 0, $errorMessage = '') {
+    public function __construct($errorCode = 0, $errorMessage = '',$data = array()) {
         $this->code = $errorCode;
         $this->message = $errorMessage;
+        $this->data = $data;
     }
 
     public function __toString() {
@@ -16,7 +18,8 @@ class JSONResult {
     protected function objectAsArray() {
         $returnArray = array(
             'code' => $this->code,
-            'message' => $this->message);
+            'message' => $this->message,
+            'data' => $this->data);
         return $returnArray;
     }
 
@@ -34,6 +37,14 @@ class JSONResult {
 
     public function setMessage($message) {
         $this->message = $message;
+    }
+
+    public function data() {
+        return $this->data;
+    }
+
+    public function setData($data) {
+        $this->data = $data;
     }
     
 }
