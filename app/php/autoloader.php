@@ -5,9 +5,11 @@ class Autoloader {
     protected static $table = array(
         'Database' => 'classes/database.php',
         'UserService' => 'services/user.php',
+        'ForumService' => 'services/forum.php',
         'JSONResult' => 'classes/json_results.php',
         'Http' => 'services/http.php',
-        'Authentication' => 'services/authentication.php'
+        'Authentication' => 'services/authentication.php',
+        'Error' => 'classes/error.php'
     );
 
     public static function loadClass($name) {
