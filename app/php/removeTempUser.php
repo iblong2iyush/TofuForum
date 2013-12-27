@@ -1,6 +1,7 @@
 <?php
 require_once('autoloader.php');
 Http::json_header();
-$userService = new UserService(Database::db());
+$authenticationService = new AuthenticationService();
+$userService = new UserService(Database::db(),$authenticationService);
 echo $userService->removeTempUser();
 ?>
