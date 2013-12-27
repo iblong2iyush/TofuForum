@@ -8,7 +8,7 @@ class Autoloader {
         'ForumService' => 'services/forum.php',
         'JSONResult' => 'classes/json_results.php',
         'Http' => 'services/http.php',
-        'Authentication' => 'services/authentication.php',
+        'AuthenticationService' => 'services/authentication.php',
         'Error' => 'classes/error.php'
     );
 

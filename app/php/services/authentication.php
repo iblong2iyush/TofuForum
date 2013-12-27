@@ -1,9 +1,9 @@
 <?php
 
-class Authentication {
+class AuthenticationService {
 
-    public static function hash($password) {
-        $salt = self::randomSalt();
+    public function hash($password) {
+        $salt = $this->randomSalt();
         $saltedPassword = $password . $salt;
         $digest = openssl_digest($saltedPassword,'sha512');
         return array(
@@ -11,13 +11,13 @@ class Authentication {
             'hash'=>$digest);
     }
     
-    public static function authenticate($password,$hash,$salt) {
+    public function authenticate($password,$hash,$salt) {
         $saltedPassword = $password . $salt;
         $digest = openssl_digest($saltedPassword,'sha512');
         return $hash === $digest;
     }
 
-    protected static function randomSalt() {
+    protected function randomSalt() {
         $cstrong = false;
         while (!$cstrong) {        
             $bytes = openssl_random_pseudo_bytes(16, $cstrong);
