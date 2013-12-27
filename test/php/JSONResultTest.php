@@ -18,11 +18,12 @@ class JSONResultTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testJSON() {
-        $v = new JSONResult(2,'A');
+        $v = new JSONResult(2,'A',array(1,2,3));
         $output = strval($v);
         $w = json_decode($output);
         $this->assertEquals($v->code(),$w->code);
         $this->assertEquals($v->message(),$w->message);
+        $this->assertEquals($v->data(),$w->data);
     }
 
 }
