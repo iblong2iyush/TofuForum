@@ -31,7 +31,7 @@ class UserServiceTest extends PHPUnit_Extensions_Database_TestCase {
     }
 
     protected function setUp() {
-        $this->userService = new UserService($this->getDb());
+        $this->userService = new UserService($this->getDB(),new AuthenticationService());
         parent::setUp();
         $this->goodDataArray = array(
             'userName' => 'Jerome Chan Yeow Heong',

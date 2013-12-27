@@ -10,34 +10,48 @@ class ForumService {
        Version 0.1
     */
 
-    protected static $db;
+    protected $db;
+    protected $userService;
 
-    public static function setDB($db) {
-        self::$db = $db;
+    public function __construct($pdo,$userService) {
+        $this->setDB($pdo);
+        $this->setUserService($userService);
     }
     
-    public static function DB() {
-        return self::$db;
+    public function setDB($pdo) {
+        $this->db = $pdo;
+    }
+    
+    public function DB() {
+        return $this->db;
     }
 
-    public static function listForums($userService=UserService) {
+    public function setUserService($service) {
+        $this->userService = $service;
+    }
+
+    public function getUserService() {
+        return $this->userService;
+    }
+
+    public function listForums() {
         $forumRows = array();
-        if (!UserService::isUserOk()) {
+        if (!$this->getUserService()->isUserOk()) {
             /* Return JSON result that says user is not authenticated or ok */
             return new JSONResult(Error::unauthenticatedError,'User is not authenticated or does not have permission to access this section.');
         }
         try {
             /* get list of all forums that belong to this user */
-            $forumRows = self::getForums();
+            $forumRows = $this->getForums();
         } catch (Exception $e) {
             return new JSONResult(Error::unknownError,$e->getMessage());
         }
         return new JSONResult(Error::resultOk,'Ok',$forumRows);
     }
 
-    protected static function getForums() {
-        $db = self::DB();
-        $ownerId = UserService::getUser()['id'];
+    protected function getForums() {
+        $db = $this->DB();
+        $ownerId = $this->getUserService()->getUser()['id'];
         $sql = 'select * from forums where ownerId = :ownerId';
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':ownerId',$ownerId);

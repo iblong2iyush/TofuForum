@@ -11,9 +11,11 @@ class UserService {
     */
 
     protected $db;
+    protected $authenticationService;
 
-    public function __construct($db) {
+    public function __construct($db,$authenticationService) {
         $this->setDB($db);
+        $this->setAuthenticationService($authenticationService);
     }
     
     public function setDB($db) {
@@ -22,6 +24,14 @@ class UserService {
   
     public function DB() {
         return $this->db;
+    }
+
+    public function setAuthenticationService($service) {
+        $this->authenticationService = $service;
+    }
+
+    public function authenticationService() {
+        return $this->authenticationService;
     }
   
     public function signup($data) {
@@ -79,7 +89,7 @@ class UserService {
                 return new JSONResult(Error::accountError,'Account is disabled.');
             }
             /* Authentication failed */
-            if (!Authentication::authenticate($data['userPassword'],$user['password'],$user['salt'])) {
+            if (!$this->authenticationService()->authenticate($data['userPassword'],$user['password'],$user['salt'])) {
                 return new JSONResult(Error::namePasswordError,'Name or password does not match records.');
             }
         } catch (Exception $e) {
@@ -131,11 +141,11 @@ class UserService {
                 return new JSONResult(Error::accountError,'Account is disabled.');
             }
             /* confirm password matches */
-            if (!Authentication::authenticate($data['userCurrentPassword'],$user['password'],$user['salt'])) {
+            if (!$this->authenticationService()->authenticate($data['userCurrentPassword'],$user['password'],$user['salt'])) {
                 return new JSONResult(Error::namePasswordError,'Entered current password does not match stored password.');
             }
             /* cleared all checks, generate new salt and hash */
-            $result = Authentication::hash($data['userNewPassword']);
+            $result = $this->authenticationService()->hash($data['userNewPassword']);
       
             /* update database */
             $user['password'] = $result['hash'];
@@ -208,7 +218,7 @@ class UserService {
     }
 
     protected function addUserToDatabase($data) {
-        $securePasswordHash = Authentication::hash($data['userPassword']);
+        $securePasswordHash = $this->authenticationService->hash($data['userPassword']);
         $db = $this->DB();
         $sql = 'insert into users (name, email, password, salt, permission, enabled) values (:name, :email, :password, :salt, 1, 1)';
         $stmt = $db->prepare($sql);
